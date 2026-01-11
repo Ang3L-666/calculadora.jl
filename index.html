@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema JL Equipamentos</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+
+    <header class="app-bar">
+        <div class="header-info">
+            <h1>JL EQUIPAMENTOS</h1>
+            <p>João Pessoa - PB </p>
+        </div>
+        <span class="badge">SISTEMA PRO</span>
+    </header>
+
+    <div class="layout-principal">
+        
+        <div class="painel-ferramentas">
+            
+            <div class="card config-card">
+                <div class="card-header"><span class="material-icons">person</span> Cliente & Entrega</div>
+                <input type="text" id="nomeCliente" placeholder="Nome do Cliente" oninput="salvarProgresso()">
+                <input type="text" id="enderecoEntrega" placeholder="Endereço de Entrega" oninput="salvarProgresso()">
+                
+                <div class="row" style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                    <div class="col">
+                        <label>Material Base:</label>
+                        <select id="tipoMaterial" onchange="salvarProgresso()">
+                            <option value="304">Inox 304</option>
+                            <option value="430">Inox 430</option>
+                            <option value="galv">Aço Carb.</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Preço Aço (R$/Kg):</label>
+                        <input type="number" id="precoKg" placeholder="0.00" oninput="salvarProgresso()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><span class="material-icons">crop_landscape</span> Chapas</div>
+                <div class="row">
+                    <div class="col"><input type="number" id="comprimento" placeholder="Comp. (m)"></div>
+                    <div class="col"><input type="number" id="largura" placeholder="Larg. (m)"></div>
+                </div>
+                <select id="espessura">
+                    <option value="0.5">0.5 mm</option>
+                    <option value="0.8">0.8 mm</option>
+                    <option value="1.0" selected>1.0 mm</option>
+                    <option value="1.2">1.2 mm</option>
+                    <option value="1.5">1.5 mm</option>
+                    <option value="2.0">2.0 mm</option>
+                    <option value="3.0">3.0 mm</option>
+                </select>
+                <button onclick="adicionarChapa()" class="btn-add">Adicionar Chapa</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><span class="material-icons">crop_square</span> Tubos</div>
+                <select id="formatoTubo" onchange="mudarLabelTubo()">
+                    <option value="quadrado">Quadrado (Metalon)</option>
+                    <option value="retangular">Retangular</option>
+                    <option value="redondo">Redondo</option>
+                </select>
+                <div class="row">
+                    <div class="col"><input type="number" id="medidaTubo" placeholder="Lado A (mm)"></div>
+                    <div class="col" id="boxMedida2" style="display:none;">
+                        <input type="number" id="medidaTubo2" placeholder="Lado B (mm)">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col"><input type="number" id="espessuraTubo" placeholder="Espessura (mm)"></div>
+                    <div class="col"><input type="number" id="comprimentoTubo" placeholder="Comp. Total (m)"></div>
+                </div>
+                <button onclick="adicionarTubo()" class="btn-add dark">Adicionar Tubo</button>
+            </div>
+
+            <div class="card destaque-laranja">
+                <div class="card-header"><span class="material-icons">shopping_cart</span> Outros Itens</div>
+                
+                <input type="text" id="nomeAcessorio" placeholder="Nome Acessório (Ex: Rodinha)">
+                <div class="row">
+                    <div class="col"><input type="number" id="qtdAcessorio" placeholder="Qtd"></div>
+                    <div class="col"><input type="number" id="precoAcessorio" placeholder="R$ Unit."></div>
+                </div>
+                <button onclick="adicionarAcessorio()" class="btn-add orange">Add Acessório</button>
+                
+                <hr style="margin: 15px 0; border: 0; border-top: 1px dashed #ccc;">
+                
+                <label style="color:#555">Soldagem (Consumíveis)</label>
+                <div class="row">
+                    <div class="col"><input type="number" id="metrosSolda" placeholder="Total Metros"></div>
+                    <div class="col"><input type="number" id="custoMetroSolda" value="5.00" placeholder="R$/m"></div>
+                </div>
+                <button onclick="adicionarSolda()" class="btn-add" style="background:#7f8c8d;">Add Solda</button>
+            </div>
+        </div>
+
+        <div class="painel-resumo">
+            
+            <div class="card recibo">
+                <h3>Resumo do Orçamento</h3>
+                <div class="tabela-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th style="text-align:right">Custo</th>
+                                <th width="30"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaItens"></tbody>
+                    </table>
+                </div>
+                <div class="total-parcial">
+                    <small>Subtotal Material:</small>
+                    <strong id="totalMaterial">R$ 0,00</strong>
+                </div>
+                <button onclick="limparOrcamento()" class="btn-reset">LIMPAR TUDO (NOVO)</button>
+            </div>
+
+            <div class="card financeiro">
+                <h3>Fechamento Comercial</h3>
+                
+                <div class="row">
+                    <div class="col">
+                        <label>Extras (Luz/Disco):</label>
+                        <input type="number" id="custoExtras" oninput="calcularTotalFinal()" placeholder="0.00">
+                    </div>
+                    <div class="col">
+                        <label>Mão de Obra:</label>
+                        <input type="number" id="custoMaoObra" oninput="calcularTotalFinal()" placeholder="0.00">
+                    </div>
+                </div>
+                
+                <label style="margin-top:10px; display:block">Margem de Lucro: <span id="labelMargem">30%</span></label>
+                <input type="range" id="margemLucroRange" min="0" max="100" value="30" oninput="atualizarMargem()">
+
+                <div class="frete-box">
+                    <div class="row" style="margin-bottom:5px;">
+                        <label style="font-weight:bold; color:#0d47a1;">Logística / Entrega</label>
+                    </div>
+                    <select id="tipoFrete" onchange="alternarTipoFrete()">
+                        <option value="proprio">Veículo Próprio</option>
+                        <option value="terceiro">Frete Terceirizado</option>
+                    </select>
+
+                    <div id="boxFreteProprio" style="margin-top:10px;">
+                        <div class="row">
+                            <div class="col">
+                                <label style="font-size:10px; color:#555;">Distância (Ida/Volta)</label>
+                                <input type="number" id="distanciaKm" placeholder="Km Total" oninput="calcularFrete()">
+                            </div>
+                            <div class="col">
+                                <label style="font-size:10px; color:#555;">Consumo (Km/L)</label>
+                                <input type="number" id="consumoVeiculo" value="10" placeholder="Km/L" oninput="calcularFrete()">
+                            </div>
+                            <div class="col">
+                                <label style="font-size:10px; color:#555;">Preço Litro (R$)</label>
+                                <input type="number" id="precoCombustivel" value="6.00" placeholder="R$" oninput="calcularFrete()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="boxFreteTerceiro" style="display:none; margin-top:10px;">
+                        <label style="font-size:10px; color:#555;">Valor do Carreto:</label>
+                        <input type="number" id="valorFreteTerceiro" placeholder="R$ 0,00" oninput="calcularFrete()">
+                    </div>
+
+                    <div class="row" style="align-items:center; margin-top:5px; border-top:1px dashed #bdddf7; padding-top:5px;">
+                        <label style="font-size:11px; color:#0d47a1;">Custo Frete:</label>
+                        <input type="number" id="valorFrete" readonly placeholder="0.00" style="background:#eef7ff; font-weight:bold; color:#0d47a1;">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label>Desconto (R$):</label>
+                        <input type="number" id="descontoVenda" oninput="calcularTotalFinal()" placeholder="0.00">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Pagamento:</label>
+                        <input type="text" id="formaPagamento" placeholder="Ex: 50% Pix" oninput="salvarProgresso()">
+                    </div>
+                    <div class="col">
+                        <label>Previsão Entrega:</label>
+                        <input type="text" id="prazoEntrega" placeholder="Ex: 7 dias" oninput="salvarProgresso()">
+                    </div>
+                </div>
+
+                <div class="box-preco-final">
+                    <div class="custo-detalhe">Custo Prod.: <span id="custoProducao">R$ 0,00</span></div>
+                    <small>TOTAL FINAL</small>
+                    <h1 id="precoVendaFinal">R$ 0,00</h1>
+                    <small id="lucroLiquido">Lucro Líquido: R$ 0,00</small>
+                </div>
+
+                <div class="acoes-exportacao">
+                    
+                    <p class="titulo-export">Para o Cliente (Limpo):</p>
+                    <div class="grid-botoes">
+                        <button onclick="enviarWhatsApp()" class="btn-zap" title="Enviar Orçamento"><span class="material-icons">whatsapp</span> WhatsApp</button>
+                        <button onclick="imprimirCliente()" class="btn-print" title="Imprimir PDF"><span class="material-icons">print</span> PDF Cliente</button>
+                    </div>
+
+                    <p class="titulo-export" style="margin-top:15px;">Interno (Completo):</p>
+                    <div class="grid-botoes">
+                        <button onclick="enviarWhatsAppInterno()" class="btn-zap" style="background-color: #128C7E;"><span class="material-icons">whatsapp</span> Relatório</button>
+                        <button onclick="imprimirInterno()" class="btn-print dark" title="Imprimir Relatório"><span class="material-icons">assignment</span> PDF Geral</button>
+                        <button onclick="gerarExcelInterno()" class="btn-excel" title="Baixar Excel"><span class="material-icons">table_view</span> Excel</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
