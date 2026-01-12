@@ -1,36 +1,58 @@
 * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 body { margin: 0; background-color: #f0f2f5; padding-bottom: 50px; }
+
+/* CABEÇALHO */
 .app-bar { background-color: #0056b3; color: white; padding: 15px; border-radius: 0 0 15px 15px; margin-bottom: 20px; }
 .header-info { display: flex; align-items: center; justify-content: center; gap: 15px; }
-.logo-header { height: 50px; border-radius: 6px; border: 2px solid rgba(255,255,255,0.3); }
+.logo-header { height: 60px; border-radius: 6px; border: 2px solid rgba(255,255,255,0.3); }
+.meta-orcamento { background: rgba(0,0,0,0.2); padding: 5px 10px; border-radius: 4px; font-size: 12px; margin-top: 5px; display: inline-block; }
+
+/* LAYOUT */
 .layout-principal { display: grid; grid-template-columns: 1fr 380px; gap: 20px; padding: 0 20px; max-width: 1300px; margin: 0 auto; }
 .card { background: white; padding: 15px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 15px; }
-.card-header { font-weight: bold; color: #0056b3; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #eee; }
-input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 5px; }
+.card-header { font-weight: bold; color: #0056b3; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+
+/* INPUTS E BOTÕES */
+input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 5px; font-size: 14px; }
 label { font-size: 11px; font-weight: bold; color: #555; }
 .row { display: flex; gap: 10px; }
 .col { flex: 1; }
-button { cursor: pointer; border: none; border-radius: 6px; font-weight: bold; color: white; padding: 10px; }
+
+button { cursor: pointer; border: none; border-radius: 6px; font-weight: bold; color: white; padding: 10px; transition: 0.2s; }
 .btn-add { background: #0056b3; width: 100%; margin-top: 5px; }
+.btn-add:hover { background: #004494; }
 .btn-add.dark { background: #34495e; }
 .btn-add.orange { background: #d35400; }
 .btn-reset { background: #e74c3c; width: 100%; margin-top: 10px; }
-.btn-del { background: #fee; color: red; padding: 2px 5px; }
+.btn-del { background: #fee; color: red; padding: 2px 8px; }
 
-/* BOTÕES DE MAPA (ESTILO NOVO) */
-.input-group-mapa { display: flex; gap: 5px; align-items: center; margin-bottom: 5px; }
+/* MAPAS E BUSCA */
+.input-group-mapa { display: flex; gap: 5px; align-items: center; margin-bottom: 8px; }
 .input-group-mapa input { margin-bottom: 0; }
-.btn-mapa { padding: 8px 12px; display: flex; align-items: center; justify-content: center; width: 50px; }
-.btn-mapa.google { background: #4285F4; } /* Azul Google */
-.btn-mapa.google:hover { background: #3367D6; }
-.btn-mapa.waze { background: #33CCFF; } /* Azul Waze */
-.btn-mapa.waze:hover { background: #00A3D9; }
+.btn-mapa { padding: 8px; display: flex; align-items: center; justify-content: center; width: 45px; }
+.btn-mapa.google { background: #4285F4; }
+.btn-mapa.waze { background: #33CCFF; }
+#buscaMaterial { border: 2px solid #e1e8ed; background-color: #fcfcfc; font-weight: bold; }
+#buscaMaterial:focus { border-color: #0056b3; outline: none; }
 
+/* HISTÓRICO */
+.historico-card { border-left: 4px solid #34495e; background: #fdfdfd; }
+.lista-historico { max-height: 150px; overflow-y: auto; margin-top: 5px; border: 1px solid #eee; border-radius: 4px; }
+.item-hist { padding: 8px; border-bottom: 1px solid #eee; cursor: pointer; background: #fff; }
+.item-hist:hover { background: #eef7ff; }
+
+/* RESUMO E PESO */
 .tabela-container { max-height: 200px; overflow-y: auto; font-size: 12px; }
 table { width: 100%; border-collapse: collapse; }
+td { padding: 5px 0; border-bottom: 1px solid #eee; }
+.info-peso { background: #f0f7ff; color: #0056b3; padding: 8px; border-radius: 6px; font-size: 13px; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
+
+/* FINANCEIRO */
 .frete-box { background: #f8fbff; border: 1px solid #cce5ff; padding: 10px; border-radius: 8px; margin: 10px 0; }
-.box-preco-final { background: #28a745; color: white; padding: 15px; text-align: center; border-radius: 10px; }
+.box-preco-final { background: #28a745; color: white; padding: 15px; text-align: center; border-radius: 10px; margin-top: 10px; }
 .box-grafico { height: 200px; margin: 15px 0; }
+
+/* EXPORTAÇÃO E RODAPÉ */
 .titulo-export { font-size: 11px; font-weight: bold; color: #666; margin-bottom: 5px; text-transform: uppercase; }
 .grid-botoes { display: flex; gap: 5px; margin-bottom: 5px; }
 .btn-zap { flex: 1; background: #25D366; }

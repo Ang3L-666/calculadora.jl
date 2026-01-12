@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema JL Equipamentos</title>
+    <title>JL Sistemas - ERP Industrial</title>
     <link rel="icon" href="img_jl_logo.jpg">
-    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="style.css?v=8">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -19,39 +19,66 @@
             <img src="img_jl_logo.jpg" alt="Logo" class="logo-header">
             <div>
                 <h1>JL EQUIPAMENTOS</h1>
-                <p>João Pessoa - PB </p>
+                <p>João Pessoa - PB 
+                </div>
             </div>
         </div>
     </header>
 
     <div class="layout-principal">
+        
         <div class="painel-ferramentas">
+            
+            <div class="card historico-card">
+                <div class="card-header"><span class="material-icons">history</span> Histórico / Memória</div>
+                <div id="listaHistorico" class="lista-historico">
+                    <small style="padding:10px; display:block; color:#888">Nenhum orçamento salvo.</small>
+                </div>
+                <button onclick="salvarNoHistorico()" class="btn-add dark" style="margin-top:10px; font-size:12px;">SALVAR ORÇAMENTO (MEMÓRIA)</button>
+            </div>
+
             <div class="card config-card">
-                <div class="card-header"><span class="material-icons">person</span> Cliente & Entrega</div>
+                <div class="card-header"><span class="material-icons">person</span> Cliente & Logística</div>
                 <input type="text" id="nomeCliente" placeholder="Nome do Cliente" oninput="salvarProgresso()">
                 
                 <div class="input-group-mapa">
                     <input type="text" id="enderecoEntrega" placeholder="Endereço de Entrega" oninput="salvarProgresso()">
-                    <button onclick="abrirMapa()" class="btn-mapa google" title="Abrir no Google Maps">
-                        <span class="material-icons">map</span>
-                    </button>
-                    <button onclick="abrirWaze()" class="btn-mapa waze" title="Abrir no Waze">
-                        <span class="material-icons">directions_car</span>
-                    </button>
+                    <button onclick="abrirMapa()" class="btn-mapa google" title="Google Maps"><span class="material-icons">map</span></button>
+                    <button onclick="abrirWaze()" class="btn-mapa waze" title="Waze"><span class="material-icons">directions_car</span></button>
                 </div>
 
+                <label style="margin-top:10px; color:#d35400;">Biblioteca de Materiais:</label>
+                <input type="text" id="buscaMaterial" placeholder="Buscar (Ex: Bronze, Nylon)..." oninput="filtrarMateriais()">
+                
                 <div class="row">
                     <div class="col">
-                        <label>Material:</label>
                         <select id="tipoMaterial" onchange="salvarProgresso()">
-                            <option value="304">Inox 304 (8.00 g/cc)</option>
-                            <option value="430">Inox 430 (7.74 g/cc)</option>
-                            <option value="galv">Aço Carb. (7.87 g/cc)</option>
+                            <optgroup label="Aços Inoxidáveis">
+                                <option value="304">Inox 304 (8.00 g/cc)</option>
+                                <option value="430">Inox 430 (7.74 g/cc)</option>
+                                <option value="316">Inox 316 (7.98 g/cc)</option>
+                            </optgroup>
+                            <optgroup label="Aços Carbono">
+                                <option value="galv">Galvanizado (7.87 g/cc)</option>
+                                <option value="1020">SAE 1020 (7.85 g/cc)</option>
+                                <option value="1045">SAE 1045 (7.85 g/cc)</option>
+                            </optgroup>
+                            <optgroup label="Metais Não Ferrosos">
+                                <option value="alu">Alumínio (2.70 g/cc)</option>
+                                <option value="lat">Latão (8.50 g/cc)</option>
+                                <option value="cob">Cobre (8.96 g/cc)</option>
+                                <option value="brz">Bronze (8.80 g/cc)</option>
+                                <option value="tit">Titânio (4.50 g/cc)</option>
+                            </optgroup>
+                            <optgroup label="Plásticos Industriais">
+                                <option value="nyl">Nylon 6.0 (1.14 g/cc)</option>
+                                <option value="uhmw">UHMW (0.94 g/cc)</option>
+                                <option value="pol">Polipropileno (0.91 g/cc)</option>
+                            </optgroup>
                         </select>
                     </div>
                     <div class="col">
-                        <label>Preço Aço (R$/Kg):</label>
-                        <input type="number" id="precoKg" placeholder="0.00" oninput="salvarProgresso()">
+                        <input type="number" id="precoKg" placeholder="R$/Kg" oninput="salvarProgresso()">
                     </div>
                 </div>
             </div>
@@ -68,16 +95,20 @@
                     <option value="1.0" selected>1.0 mm</option>
                     <option value="1.5">1.5 mm</option>
                     <option value="2.0">2.0 mm</option>
+                    <option value="3.0">3.0 mm</option>
+                    <option value="4.75">4.75 mm (3/16)</option>
+                    <option value="6.35">6.35 mm (1/4)</option>
                 </select>
                 <button onclick="adicionarChapa()" class="btn-add">Adicionar Chapa</button>
             </div>
 
             <div class="card">
-                <div class="card-header"><span class="material-icons">crop_square</span> Tubos</div>
+                <div class="card-header"><span class="material-icons">crop_square</span> Tubos / Tarugos</div>
                 <select id="formatoTubo" onchange="mudarLabelTubo()">
-                    <option value="quadrado">Quadrado</option>
-                    <option value="retangular">Retangular</option>
-                    <option value="redondo">Redondo</option>
+                    <option value="quadrado">Tubo Quadrado</option>
+                    <option value="retangular">Tubo Retangular</option>
+                    <option value="redondo">Tubo Redondo</option>
+                    <option value="macico">Tarugo Maciço (Redondo)</option>
                 </select>
                 <div class="row">
                     <div class="col"><input type="number" id="medidaTubo" placeholder="Lado A/Diâm (mm)"></div>
@@ -87,22 +118,21 @@
                     <div class="col"><input type="number" id="espessuraTubo" placeholder="Esp. (mm)"></div>
                     <div class="col"><input type="number" id="comprimentoTubo" placeholder="Comp. (m)"></div>
                 </div>
-                <button onclick="adicionarTubo()" class="btn-add dark">Adicionar Tubo</button>
+                <button onclick="adicionarTubo()" class="btn-add dark">Adicionar Item</button>
             </div>
 
             <div class="card destaque-laranja">
-                <div class="card-header"><span class="material-icons">shopping_cart</span> Outros Itens</div>
-                <input type="text" id="nomeAcessorio" placeholder="Nome Acessório">
+                <div class="card-header"><span class="material-icons">shopping_cart</span> Outros / Solda</div>
+                <input type="text" id="nomeAcessorio" placeholder="Item (Ex: Rodízio, Dobradiça)">
                 <div class="row">
                     <div class="col"><input type="number" id="qtdAcessorio" placeholder="Qtd"></div>
                     <div class="col"><input type="number" id="precoAcessorio" placeholder="R$ Unit."></div>
                 </div>
-                <button onclick="adicionarAcessorio()" class="btn-add orange">Add Acessório</button>
+                <button onclick="adicionarAcessorio()" class="btn-add orange">Add Item</button>
                 <hr>
-                <label>Soldagem (Metros)</label>
                 <div class="row">
-                    <div class="col"><input type="number" id="metrosSolda" placeholder="Total Metros"></div>
-                    <div class="col"><input type="number" id="custoMetroSolda" value="5.00"></div>
+                    <div class="col"><label>Solda (m)</label><input type="number" id="metrosSolda" placeholder="Metros"></div>
+                    <div class="col"><label>R$/m</label><input type="number" id="custoMetroSolda" value="5.00"></div>
                 </div>
                 <button onclick="adicionarSolda()" class="btn-add" style="background:#7f8c8d;">Add Solda</button>
             </div>
@@ -110,15 +140,20 @@
 
         <div class="painel-resumo">
             <div class="card recibo">
-                <h3>Resumo do Orçamento</h3>
+                <h3>Resumo Técnico</h3>
                 <div class="tabela-container">
                     <table>
-                        <thead><tr><th>Item</th><th style="text-align:right">Custo</th><th width="30"></th></tr></thead>
+                        <thead><tr><th>Desc.</th><th style="text-align:right">Peso/Custo</th><th width="30"></th></tr></thead>
                         <tbody id="listaItens"></tbody>
                     </table>
                 </div>
-                <div class="total-parcial">Subtotal Material: <strong id="totalMaterial">R$ 0,00</strong></div>
-                <button onclick="limparOrcamento()" class="btn-reset">LIMPAR TUDO</button>
+                
+                <div class="info-peso">
+                    <span class="material-icons" style="font-size:16px">scale</span> Peso Total: <strong id="pesoTotalDisplay">0.00 kg</strong>
+                </div>
+                <div class="total-parcial">Custo Material: <strong id="totalMaterial">R$ 0,00</strong></div>
+                
+                <button onclick="limparOrcamento()" class="btn-reset">LIMPAR TUDO (NOVO)</button>
             </div>
 
             <div class="card financeiro">
@@ -132,7 +167,7 @@
                 <input type="range" id="margemLucroRange" min="0" max="100" value="30" oninput="atualizarMargem()">
 
                 <div class="frete-box">
-                    <label>Logística / Entrega</label>
+                    <label>Logística</label>
                     <select id="tipoFrete" onchange="alternarTipoFrete()">
                         <option value="proprio">Veículo Próprio</option>
                         <option value="terceiro">Terceirizado</option>
@@ -156,8 +191,8 @@
                 <div class="col"><label>Desconto (R$):</label><input type="number" id="descontoVenda" oninput="calcularTotalFinal()"></div>
                 
                 <div class="row">
-                    <div class="col"><label>Pagamento:</label><input type="text" id="formaPagamento" placeholder="Ex: Pix" oninput="salvarProgresso()"></div>
-                    <div class="col"><label>Previsão:</label><input type="text" id="prazoEntrega" placeholder="Ex: 30 dias" oninput="salvarProgresso()"></div>
+                    <div class="col"><label>Pagamento:</label><input type="text" id="formaPagamento" placeholder="Ex: Pix 50/50" oninput="salvarProgresso()"></div>
+                    <div class="col"><label>Previsão:</label><input type="text" id="prazoEntrega" placeholder="Ex: 15 dias" oninput="salvarProgresso()"></div>
                 </div>
 
                 <div class="box-preco-final">
@@ -172,12 +207,12 @@
                 </div>
 
                 <div class="acoes-exportacao">
-                    <p class="titulo-export">Para o Cliente (Limpo):</p>
+                    <p class="titulo-export">Cliente:</p>
                     <div class="grid-botoes">
                         <button onclick="enviarWhatsApp()" class="btn-zap">WhatsApp</button>
                         <button onclick="imprimirCliente()" class="btn-print">PDF Cliente</button>
                     </div>
-                    <p class="titulo-export" style="margin-top:15px;">Interno (Completo):</p>
+                    <p class="titulo-export" style="margin-top:10px;">Interno:</p>
                     <div class="grid-botoes">
                         <button onclick="enviarWhatsAppInterno()" class="btn-zap" style="background-color: #128C7E;">Relatório</button>
                         <button onclick="imprimirInterno()" class="btn-print dark">PDF Geral</button>
@@ -189,9 +224,9 @@
 
         <div class="footer-termos">
             <h4>Termos e Condições</h4>
-            <p>1. Validade: 5 dias. 2. Garantia de 90 dias na fabricação. 3. Frete calculado por consumo de combustível.</p>
+            <p>1. Validade desta proposta: <span id="dataValidadeFooter">5 dias</span>. 2. Entrega sujeita a confirmação de pagamento. 3. Garantia de 90 dias contra defeitos de fabricação. 4. Valores sujeitos a alteração conforme tabela de matéria-prima.</p>
         </div>
     </div>
-    <script src="script.js?v=6"></script>
+    <script src="script.js?v=8"></script>
 </body>
 </html>
