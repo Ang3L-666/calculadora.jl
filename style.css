@@ -1,63 +1,36 @@
 * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 body { margin: 0; background-color: #f0f2f5; padding-bottom: 50px; }
-
-.app-bar { background-color: #0056b3; color: white; padding: 20px; text-align: center; border-radius: 0 0 15px 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-.app-bar h1 { margin: 0; font-size: 24px; letter-spacing: 2px; }
-.app-bar p { margin: 5px 0 0; font-size: 13px; opacity: 0.9; }
-
+.app-bar { background-color: #0056b3; color: white; padding: 15px; text-align: center; border-radius: 0 0 15px 15px; margin-bottom: 20px; }
 .layout-principal { display: grid; grid-template-columns: 1fr 380px; gap: 20px; padding: 0 20px; max-width: 1300px; margin: 0 auto; }
 .card { background: white; padding: 15px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 15px; }
-.card-header { font-weight: bold; color: #0056b3; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-.config-card { background: #e8f0fe; border: 1px solid #b3d7ff; }
-
-input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 8px; font-size: 14px; }
-label { font-size: 11px; font-weight: bold; color: #555; display: block; margin-bottom: 2px; }
+.card-header { font-weight: bold; color: #0056b3; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #eee; }
+input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 5px; }
+label { font-size: 11px; font-weight: bold; color: #555; }
 .row { display: flex; gap: 10px; }
 .col { flex: 1; }
-
-button { cursor: pointer; border: none; border-radius: 6px; font-weight: bold; color: white; padding: 12px; font-size: 13px; }
-.btn-add { background: #0056b3; width: 100%; }
+button { cursor: pointer; border: none; border-radius: 6px; font-weight: bold; color: white; padding: 10px; }
+.btn-add { background: #0056b3; width: 100%; margin-top: 5px; }
 .btn-add.dark { background: #34495e; }
 .btn-add.orange { background: #d35400; }
-.btn-reset { background: #e74c3c; width: 100%; margin-top: 10px; padding: 8px; }
-.btn-del { background: #fee; color: red; padding: 4px 8px; }
-
-.tabela-container { max-height: 200px; overflow-y: auto; font-size: 13px; }
+.btn-reset { background: #e74c3c; width: 100%; margin-top: 10px; }
+.btn-del { background: #fee; color: red; padding: 2px 5px; }
+.tabela-container { max-height: 200px; overflow-y: auto; font-size: 12px; }
 table { width: 100%; border-collapse: collapse; }
-td { padding: 6px 0; border-bottom: 1px solid #eee; }
-.total-parcial { text-align: right; border-top: 2px dashed #eee; font-size: 14px; margin-top: 10px; }
-
-.frete-box { background: #f8fbff; border: 1px solid #cce5ff; padding: 10px; border-radius: 8px; margin: 15px 0; }
-.box-preco-final { background: #28a745; color: white; padding: 20px; text-align: center; border-radius: 10px; margin-top: 15px; }
-.box-preco-final h1 { font-size: 36px; margin: 5px 0; }
-.custo-detalhe { font-size: 12px; opacity: 0.9; margin-bottom: 5px; }
-
-/* ESTILO DO GRÁFICO (NOVO) */
-.box-grafico { position: relative; height: 220px; margin-top: 15px; margin-bottom: 15px; }
-
+.frete-box { background: #f8fbff; border: 1px solid #cce5ff; padding: 10px; border-radius: 8px; margin: 10px 0; }
+.box-preco-final { background: #28a745; color: white; padding: 15px; text-align: center; border-radius: 10px; }
+.box-grafico { height: 200px; margin: 15px 0; }
 .titulo-export { font-size: 11px; font-weight: bold; color: #666; margin-bottom: 5px; text-transform: uppercase; }
-.grid-botoes { display: flex; gap: 8px; margin-bottom: 10px; }
+.grid-botoes { display: flex; gap: 5px; margin-bottom: 5px; }
 .btn-zap { flex: 1; background: #25D366; }
 .btn-print { flex: 1; background: #555; }
 .btn-print.dark { background: #34495e; }
 .btn-excel { flex: 1; background: #1d6f42; }
-
-/* ESTILO DOS TERMOS E CONDIÇÕES (NOVO) */
-.footer-termos { margin-top: 20px; padding: 15px; border-top: 2px solid #ddd; color: #666; font-size: 11px; text-align: justify; }
-.footer-termos h4 { margin: 0 0 5px; color: #333; }
+.footer-termos { margin-top: 20px; padding: 15px; border-top: 2px solid #ddd; font-size: 11px; color: #666; }
 
 @media (max-width: 950px) { .layout-principal { grid-template-columns: 1fr; } }
-
 @media print {
     .painel-ferramentas, .grid-botoes, button, .btn-reset, input[type=range] { display: none !important; }
-    .layout-principal { display: block; padding: 0; }
-    .card { border: none; margin-bottom: 10px; }
-    .box-preco-final { border: 2px solid #000; background: none; color: black; }
-    
-    /* ESCONDER CUSTOS E GRÁFICO NA VERSÃO CLIENTE */
-    body.print-client #custoProducao, 
-    body.print-client #lucroLiquido, 
-    body.print-client .custo-detalhe, 
-    body.print-client .frete-box,
-    body.print-client .box-grafico { display: none !important; }
+    .layout-principal { display: block; }
+    body.print-client #custoProducao, body.print-client #lucroLiquido, body.print-client .custo-detalhe, 
+    body.print-client .frete-box, body.print-client .box-grafico { display: none !important; }
 }

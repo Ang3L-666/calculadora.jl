@@ -1,7 +1,7 @@
-const DENSIDADES = { "304": 8000, "430": 7740, "galv": 7870 };
+const DENSIDADES = { "304": 8.00, "430": 7.74, "galv": 7.87 };
 let orcamento = [];
 let totalItensAcumulado = 0;
-let meuGrafico = null; 
+let meuGrafico = null;
 
 window.onload = function() {
     let salvo = localStorage.getItem('jl_orcamento_temp');
@@ -26,9 +26,7 @@ function salvarProgresso() {
         material: document.getElementById("tipoMaterial").value,
         precoKg: document.getElementById("precoKg").value,
         pagto: document.getElementById("formaPagamento").value,
-        prazo: document.getElementById("prazoEntrega").value,
-        consumo: document.getElementById("consumoVeiculo").value,
-        gasolina: document.getElementById("precoCombustivel").value
+        prazo: document.getElementById("prazoEntrega").value
     };
     localStorage.setItem('jl_orcamento_temp', JSON.stringify(dados));
 }
@@ -40,7 +38,7 @@ function adicionarChapa() {
     let larg = parseFloat(document.getElementById("largura").value);
     let esp = parseFloat(document.getElementById("espessura").value);
     if (isNaN(comp) || isNaN(larg) || isNaN(precoKg)) { alert("Preencha os dados!"); return; }
-    let custo = (comp * larg * (esp / 1000)) * DENSIDADES[mat] * precoKg;
+    let custo = (comp * larg * (esp / 1000)) * (DENSIDADES[mat] * 1000) * precoKg;
     orcamento.push({ descricao: `Chapa ${mat} ${esp}mm (${comp}x${larg}m)`, custo });
     atualizarTabela();
 }
@@ -59,7 +57,7 @@ function adicionarTubo() {
         let mB = parseFloat(document.getElementById("medidaTubo2").value) / 1000;
         area = (mA * mB) - ((mA - 2 * esp) * (mB - 2 * esp));
     } else area = Math.PI * (Math.pow(mA / 2, 2) - Math.pow((mA / 2) - esp, 2));
-    orcamento.push({ descricao: `Tubo ${mat} ${formato} (${mA*1000}mm)`, custo: area * comp * DENSIDADES[mat] * precoKg });
+    orcamento.push({ descricao: `Tubo ${mat} ${formato} (${mA*1000}mm)`, custo: area * comp * (DENSIDADES[mat] * 1000) * precoKg });
     atualizarTabela();
 }
 
@@ -115,74 +113,38 @@ function calcularTotalFinal() {
 
     let custoProd = totalItensAcumulado + extra + mo;
     let lucroBruto = custoProd * (margem / 100);
-    let lucroLiquidoReal = lucroBruto - desc;
+    let lucroReal = lucroBruto - desc;
     let total = custoProd + lucroBruto + frete;
 
     document.getElementById("custoProducao").innerText = "R$ " + custoProd.toFixed(2);
     document.getElementById("precoVendaFinal").innerText = "R$ " + (total - desc).toFixed(2);
-    document.getElementById("lucroLiquido").innerText = "Lucro Líq: R$ " + lucroLiquidoReal.toFixed(2);
+    document.getElementById("lucroLiquido").innerText = "Lucro Líq: R$ " + lucroReal.toFixed(2);
     
-    // Atualiza o gráfico sempre que recalcular
-    atualizarGrafico(totalItensAcumulado, mo, extra, frete, lucroLiquidoReal);
+    atualizarGrafico(totalItensAcumulado, mo, extra, frete, lucroReal);
 }
 
-// --- FUNÇÃO DO GRÁFICO ---
 function atualizarGrafico(mat, mo, ext, frete, lucro) {
-    // Se o lucro for negativo, mostramos zero no gráfico para não bugar
-    let lucroGrafico = lucro > 0 ? lucro : 0;
-    
     let ctx = document.getElementById('graficoFinanceiro').getContext('2d');
-    
-    if (meuGrafico) {
-        meuGrafico.destroy(); // Apaga o anterior para criar o novo
-    }
-
+    if (meuGrafico) meuGrafico.destroy();
     meuGrafico = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: ['Material', 'Mão de Obra', 'Extras', 'Frete', 'Lucro Líquido'],
             datasets: [{
-                data: [mat, mo, ext, frete, lucroGrafico],
-                backgroundColor: [
-                    '#34495e', // Material (Cinza Escuro)
-                    '#e67e22', // Mão de Obra (Laranja)
-                    '#95a5a6', // Extras (Cinza Claro)
-                    '#3498db', // Frete (Azul)
-                    '#2ecc71'  // Lucro (Verde)
-                ],
-                borderWidth: 1
+                data: [mat, mo, ext, frete, lucro > 0 ? lucro : 0],
+                backgroundColor: ['#34495e', '#e67e22', '#95a5a6', '#3498db', '#2ecc71']
             }]
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
-            }
-        }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
     });
 }
 
 function enviarWhatsApp() {
     let cliente = document.getElementById("nomeCliente").value || "Cliente";
-    let endereco = document.getElementById("enderecoEntrega").value || "Não informado";
     let total = document.getElementById("precoVendaFinal").innerText;
-    let prazo = document.getElementById("prazoEntrega").value || "A combinar";
-    let pagto = document.getElementById("formaPagamento").value || "A combinar";
-
-    let txt = `*JL EQUIPAMENTOS - PROPOSTA COMERCIAL*\n\n`;
-    txt += `Olá, *${cliente}*! Segue abaixo o detalhamento do orçamento solicitado:\n\n`;
-    txt += `📍 *Local de Entrega:* ${endereco}\n`;
-    txt += `--------------------------------\n`;
+    let txt = `*JL EQUIPAMENTOS - ORÇAMENTO*\n📍 *Cliente:* ${cliente}\n--------------------------------\n`;
     orcamento.forEach(i => txt += `✅ ${i.descricao}: R$ ${i.custo.toFixed(2)}\n`);
-    txt += `--------------------------------\n`;
-    txt += `💰 *VALOR TOTAL: ${total}*\n\n`;
-    txt += `💳 *Condição de Pagamento:* ${pagto}\n`;
-    txt += `📅 *Previsão de Entrega:* ${prazo}\n\n`;
-    txt += `_Este orçamento é válido por 5 dias devido à flutuação do preço da matéria-prima._\n\n`;
-    txt += `Qualquer dúvida, estamos à disposição!\n`;
-    txt += `*JL EQUIPAMENTOS* | João Pessoa - PB`;
-
+    txt += `--------------------------------\n💰 *TOTAL: ${total}*\nValidade: 5 dias.`;
     window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`, '_blank');
 }
 
@@ -205,7 +167,7 @@ function gerarExcelInterno() {
 }
 
 function imprimirCliente() { document.body.classList.add('print-client'); window.print(); document.body.classList.remove('print-client'); }
-function imprimirInterno() { document.body.classList.add('print-internal'); window.print(); document.body.classList.remove('print-internal'); }
+function imprimirInterno() { window.print(); }
 function removerItem(i) { orcamento.splice(i, 1); atualizarTabela(); }
 function limparOrcamento() { if(confirm("Limpar tudo?")) { localStorage.removeItem('jl_orcamento_temp'); location.reload(); } }
 function atualizarMargem() { document.getElementById("labelMargem").innerText = document.getElementById("margemLucroRange").value + "%"; calcularTotalFinal(); }
