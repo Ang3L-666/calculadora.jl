@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JL Sistemas - ERP Industrial v17</title>
+    <title>JL Sistemas - ERP Industrial v22</title>
     <link rel="icon" href="assets/img/img_jl_logo.jpg">
-    <link rel="stylesheet" href="style.css?v=17">
+    <link rel="stylesheet" href="style.css?v=22">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -101,21 +101,21 @@
                             <option value="quadrado">Quadrado</option>
                             <option value="retangular">Retangular</option>
                             <option value="redondo">Redondo</option>
-                            <option value="macico">Tarugo</option>
+                            <option value="macico">Tarugo (Maciço)</option>
                         </select>
                     </div>
-                    <div class="col"><input type="number" id="medidaTubo" placeholder="Bitola A (Ex: 40.0)"></div>
+                    <div class="col"><input type="number" id="medidaTubo" placeholder="Medida Externa A (mm)"></div>
                 </div>
                 <div class="row" id="boxMedida2" style="display:none; margin-top:5px;">
-                    <div class="col"><input type="number" id="medidaTubo2" placeholder="Bitola B (Ex: 20.0)"></div>
+                    <div class="col"><input type="number" id="medidaTubo2" placeholder="Medida Externa B (mm)"></div>
                 </div>
                 <div class="row" style="margin-top:5px;">
-                    <div class="col">
-                        <label style="color:#d35400;">Parede (mm)</label>
+                    <div class="col" id="boxEspessura">
+                        <label style="color:#d35400;">Espessura Parede (mm)</label>
                         <input type="text" id="espessuraTubo" placeholder="Ex: 1.2 ou 1.5">
                     </div>
                     <div class="col">
-                        <label>Total Metros</label>
+                        <label>Metros Totais (Projeto)</label>
                         <input type="number" id="comprimentoTubo" placeholder="Ex: 6.0">
                     </div>
                 </div>
@@ -127,8 +127,20 @@
                 
                 <div class="row">
                     <div class="col">
+                        <label style="font-weight:bold; color:#d35400;">Predefinição (Atalho):</label>
+                        <select id="tipoServico">
+                            <option value="">-- Selecione para Preencher --</option>
+                            <option value="linear">Solda Linear Simples</option>
+                            <option value="complexa">Solda Cuba/Acabamento</option>
+                            <option value="instalacao">Instalação</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:5px;">
+                    <div class="col">
                         <label>Descrição do Serviço:</label>
-                        <input type="text" id="descServico" placeholder="Ex: Solda TIG, Polimento...">
+                        <input type="text" id="descServico" placeholder="Ex: Solda TIG...">
                     </div>
                 </div>
                 
@@ -141,16 +153,14 @@
                             <option value="un">Unidade / Peça</option>
                         </select>
                     </div>
-                    <div class="col"><label>Qtd:</label><input type="number" id="qtdServico" placeholder="Ex: 2.5"></div>
-                    <div class="col"><label>R$ Unit.</label><input type="number" id="valorServico" placeholder="Valor"></div>
+                    <div class="col"><label>Qtd / Metragem:</label><input type="number" id="qtdServico" placeholder="Ex: 2.5"></div>
+                    <div class="col"><label>R$ Unitário:</label><input type="number" id="valorServico" placeholder="Valor"></div>
                 </div>
                 
                 <button onclick="adicionarServico()" class="btn-add orange">Lançar Serviço</button>
-                
                 <hr>
-                
                 <div class="row">
-                    <div class="col"><input type="text" id="nomeAcessorio" placeholder="Item Extra"></div>
+                    <div class="col"><input type="text" id="nomeAcessorio" placeholder="Item Extra (Parafuso, Rodízio)"></div>
                     <div class="col"><input type="number" id="valorAcessorio" placeholder="R$ Total"></div>
                 </div>
                 <button onclick="adicionarAcessorio()" class="btn-add" style="background:#7f8c8d;">Add Item</button>
@@ -218,14 +228,24 @@
 
                 <div class="box-grafico"><canvas id="graficoFinanceiro"></canvas></div>
 
-                <div class="grid-botoes">
-                    <button onclick="enviarWhatsApp()" class="btn-zap">WhatsApp</button>
-                    <button onclick="imprimirCliente()" class="btn-print">PDF Cliente</button>
-                    <button onclick="gerarExcelInterno()" class="btn-excel">Excel</button>
+                <div style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+                    <label style="font-size:10px; color:#888; text-transform:uppercase;">Para o Cliente:</label>
+                    <div class="grid-botoes">
+                        <button onclick="enviarWhatsApp()" class="btn-zap"><span class="material-icons" style="font-size:16px; vertical-align:middle;">chat</span> Enviar Zap</button>
+                        <button onclick="imprimirCliente()" class="btn-print"><span class="material-icons" style="font-size:16px; vertical-align:middle;">picture_as_pdf</span> PDF Proposta</button>
+                    </div>
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <label style="font-size:10px; color:#888; text-transform:uppercase;">Interno / Oficina:</label>
+                    <div class="grid-botoes">
+                        <button onclick="imprimirInterno()" class="btn-print dark"><span class="material-icons" style="font-size:16px; vertical-align:middle;">print</span> Relatório Produção</button>
+                        <button onclick="gerarExcelInterno()" class="btn-excel"><span class="material-icons" style="font-size:16px; vertical-align:middle;">grid_on</span> Excel</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="script.js?v=17"></script>
+    <script src="script.js?v=22"></script>
 </body>
 </html>

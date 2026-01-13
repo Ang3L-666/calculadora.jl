@@ -39,7 +39,6 @@ table { width: 100%; border-collapse: collapse; }
 td { padding: 5px 0; border-bottom: 1px solid #eee; }
 .info-peso { background: #f0f7ff; color: #0056b3; padding: 8px; border-radius: 6px; font-size: 13px; margin-top: 5px; }
 
-/* ESTILO DO FRETE E FECHAMENTO */
 .frete-box { background: #f8fbff; border: 1px solid #cce5ff; padding: 10px; border-radius: 8px; margin: 10px 0; }
 .box-preco-final { background: #28a745; color: white; padding: 15px; text-align: center; border-radius: 10px; margin-top: 10px; }
 .box-grafico { height: 180px; margin: 15px 0; }
@@ -56,5 +55,5 @@ td { padding: 5px 0; border-bottom: 1px solid #eee; }
     .painel-ferramentas, .grid-botoes, button, .btn-reset, input[type=range], .app-bar { display: none !important; }
     .layout-principal { display: block; padding: 0; }
     .logo-print { display: block; }
-    body.print-client #custoProducao, body.print-client #lucroLiquido, body.print-client .frete-box, body.print-client .box-grafico { display: none !important; }
+    body.print-client #custoProducao, body.print-client #lucroLiquido, body.print-client .frete-box, body.print-client .box-grafico, body.print-client label[for="margemLucro"] { display: none !important; }
 }
