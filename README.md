@@ -1,4 +1,4 @@
-# Sistema JL Sistemas - ERP Industrial
+# Sistema JL - ERP Industrial
 
 ![Versão](https://img.shields.io/badge/version-22.0-blue.svg)
 ![Status](https://img.shields.io/badge/status-active-success.svg)
